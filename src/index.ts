@@ -146,11 +146,7 @@ let listaTareasNueva: Tarea[] = [
 ];
 
 //Bucle for-each
-listaTareasNueva.forEach(
-    (tarea: Tarea, index: number) => {
-        console.log(`${index} - ${tarea.nombre}`);
-    }
-);
+listaTareasNueva.forEach((tarea: Tarea, index: number) => {console.log(`${index} - ${tarea.nombre}`)});
 
 //Bucle for
 for (let index = 0; index < listaTareasNueva.length; index++) {
@@ -431,3 +427,17 @@ console.log(generatorSaga.next().value)
 console.log(generatorSaga.next().value)
 console.log(generatorSaga.next().value)
 console.log(generatorSaga.next().value)
+
+
+//Función anónimas
+
+let fItera = function (elemento:Tarea, indice: number) {console.log(`La tarea ${elemento.nombre} se encuentra en la posición ${indice} del array`)}
+
+listaTareasNueva.forEach(fItera)
+
+
+//Más funciones arrow
+
+let fArrow = (elemento:Tarea, indice: number) => {console.log(`La tarea ${elemento.nombre} se encuentra en la posición ${indice} del array`)}
+
+listaTareasNueva.forEach(fArrow)
