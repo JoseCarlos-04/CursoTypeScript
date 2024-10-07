@@ -441,3 +441,79 @@ listaTareasNueva.forEach(fItera)
 let fArrow = (elemento:Tarea, indice: number) => {console.log(`La tarea ${elemento.nombre} se encuentra en la posición ${indice} del array`)}
 
 listaTareasNueva.forEach(fArrow)
+
+
+// CALLBACK
+
+let fSuma = function suma(a: number, b: number){
+    return a + b;
+}
+
+let fResta = function resta(a: number, b: number){
+    return a - b;
+}
+
+function opera(x:number, y:number, funcion:(a:number, b: number) => number){
+    return funcion(x, y);
+}
+
+opera(1, 2, fSuma)
+opera(1, 2, fResta)
+
+
+// ASYNC FUNCTION
+
+async function asincrona() {
+    let suma:number = 0;
+
+    for(let i = 0; i < 1000000000; i++){
+        suma += i;
+    }
+
+    return suma;
+}
+
+
+asincrona().then((data: number) => {console.log(`El resultado de ejecutar asyc = ${data}`)})
+
+console.log("Línea de código posterior a llamada asíncrona");
+
+async function getDataUniversity() : Promise<JSON []> {
+    const data = await fetch ("http://universities.hipolabs.com/search?country=Spain");
+
+    let respuesta: Promise<JSON []> = await data.json() as Promise<JSON []>;
+
+    return respuesta;
+}
+
+getDataUniversity().then((data: JSON[]) => {console.log(data[0])})
+
+type University = {
+    domains: String[],
+    alpha_two_code: String
+}
+
+async function getUniversitys() : Promise<University []> {
+    const data = await fetch ("http://universities.hipolabs.com/search?country=Spain");
+
+    let respuesta: Promise<University []> = await data.json() as Promise<University []>;
+
+    return respuesta;
+}
+
+getUniversitys().then((data:University[]) => {console.log(data[0].domains)})
+getUniversitys().then((data:University[]) => {data.forEach((universiad) => {console.log(universiad.domains)})})
+
+
+// Funcion generadora
+
+function* fGeneradora():Generator<Tarea>{
+    for (let tarea in listaTareasNueva) {
+        yield listaTareasNueva[tarea]
+    }
+}
+
+let funcionGen = fGeneradora();
+
+console.log(funcionGen.next());
+console.log(funcionGen.next());
