@@ -1,4 +1,5 @@
 import { trace } from "console";
+import { webcrypto } from "crypto";
 
 console.log("Hola mundo");
 
@@ -517,3 +518,70 @@ let funcionGen = fGeneradora();
 
 console.log(funcionGen.next());
 console.log(funcionGen.next());
+
+
+// ASYNC GENERADORA
+
+function* fGeneradora2 () : Generator<String>{
+    yield "Hola"
+    yield "Mundi"
+    yield "IES"
+}
+
+let llamadafgen2 = fGeneradora2();
+
+console.log(llamadafgen2.next());
+console.log(llamadafgen2.next());
+console.log(llamadafgen2.next());
+
+type WebPage = {
+    Name:String,
+    Domain:String,
+    Description:String
+}
+
+async function* obtenerDatosWeb() : AsyncGenerator<WebPage>{
+    let peticion = await fetch("https://haveibeenpwned.com/api/v2/breaches");
+
+    let datos:WebPage[] = await peticion.json() as WebPage[];
+
+    for(let i = 0; i < datos.length; i++){
+        yield datos[i];
+    }
+
+    /*for(let index in datos){
+        yield datos[index];
+    }*/
+}
+
+let datosWebPage = obtenerDatosWeb();
+
+datosWebPage.next().then(({value, done}) => {console.log(`${value.Name} - ${value.Description}`)});
+datosWebPage.next().then(({value, done}) => {console.log(`${value.Name} - ${value.Description}`)});
+
+
+// SOBRECARGA DE FUNCIONES
+
+function saludarSobrecarga(nombre:String) : String;
+function saludarSobrecarga(nombre:String, apellido:String) : String;
+function saludarSobrecarga(nombre:String, apellido:String, edad:String) : String;
+function saludarSobrecarga(nombre:String, apellido:String, edad:number) : String;
+
+function saludarSobrecarga(nombre:String, apellido?:String, edad?:String|number) : String {
+    let saludo = `Hola ${nombre}`
+
+    if (apellido != undefined){
+        saludo += ` ${apellido}`
+    }
+
+    if (edad != undefined){
+        saludo += ` ${edad}`
+    }
+
+    return saludo;
+}
+
+console.log(saludarSobrecarga("José Carlos"));
+console.log(saludarSobrecarga("José Carlos", "Parrilla Romero"));
+console.log(saludarSobrecarga("José Carlos", "Parrilla Romero", "20"));
+console.log(saludarSobrecarga("José Carlos", "Parrilla Romero", 20));
