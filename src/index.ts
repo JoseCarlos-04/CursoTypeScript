@@ -626,3 +626,15 @@ console.log(listaTareaObtenida);
 
 let listaTareaObtenida2:Tarea[] = JSON.parse(recuperaInfo("local", "datos"));
 console.log(listaTareaObtenida2);
+
+// Ejercicio 6
+function borraInfoAlmacenada(type:string = "session", key:string){
+    if(type == "session"){
+        sessionStorage.removeItem(key);
+    }else if(type == "local"){
+        localStorage.removeItem(key);
+    }
+}
+
+borraInfoAlmacenada("session", "datos");
+borraInfoAlmacenada("local", "datos");
