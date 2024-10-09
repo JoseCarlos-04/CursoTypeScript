@@ -585,3 +585,18 @@ console.log(saludarSobrecarga("José Carlos"));
 console.log(saludarSobrecarga("José Carlos", "Parrilla Romero"));
 console.log(saludarSobrecarga("José Carlos", "Parrilla Romero", "20"));
 console.log(saludarSobrecarga("José Carlos", "Parrilla Romero", 20));
+
+
+// ACTIVIDAD 1.1
+// Ejercicio 2
+function almacenaTarea(type:String = "SessionStorage", key:string, data:Tarea[]){
+    if(type == "session"){
+        sessionStorage.setItem(key, JSON.stringify(data));
+    }else if(type == "local"){
+        localStorage.setItem(key, JSON.stringify(data));
+    }
+}
+
+// Ejercicio 3
+almacenaTarea("session", "datos", listaTareasNueva);
+almacenaTarea("local", "datos", listaTareasNueva);
