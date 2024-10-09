@@ -638,3 +638,18 @@ function borraInfoAlmacenada(type:string = "session", key:string){
 
 borraInfoAlmacenada("session", "datos");
 borraInfoAlmacenada("local", "datos");
+
+// Ejercicio 7
+import Cookies from "js-cookie";
+
+Cookies.set("nombre", "José Carlos", {expires:7, path:"/"});
+Cookies.set("apellido", "Parrilla Romero", {expires:2});
+Cookies.set("email", "jparrom736@iescarrillo.es", {expires:4});
+
+console.log(Cookies.get("nombre"));
+console.log(Cookies.get("apellido"));
+console.log(Cookies.get("email"));
+
+Cookies.remove("nombre");
+Cookies.remove("apellido");
+Cookies.remove("email");
