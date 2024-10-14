@@ -653,3 +653,35 @@ console.log(Cookies.get("email"));
 Cookies.remove("nombre");
 Cookies.remove("apellido");
 Cookies.remove("email");
+
+
+// ACCEDEMOS A LOS ELEMENTOS DEL DOM
+
+let input = document.getElementById("input-contenido") as HTMLInputElement;
+let btnNuevoContenido = document.getElementsByName("btn-add-content")[0] as HTMLButtonElement;
+let div = document.getElementsByTagName("div") as HTMLCollectionOf<HTMLDivElement>;
+
+console.log(`Valor del input: ${input.value}`);
+console.log(btnNuevoContenido);
+console.log(div);
+
+let elementoOl = document.querySelector("lista-contenidos") as HTMLOListElement;
+let elementosLi = document.getElementById("lista-contenidos")?.getElementsByTagName("li");
+let elementosLi2 = document.querySelectorAll("ol[id='lista-contenidos'] > li");
+
+console.log(elementosLi);
+console.log(elementosLi2);
+
+// CREACIÓN DE ELEMENTOS
+
+let nuevoElemento:HTMLLIElement = document.createElement("li");
+nuevoElemento.innerText = "Nuevo Elemento";
+
+elementoOl.appendChild(nuevoElemento);
+
+nuevoElemento.setAttribute("style", "");
+
+btnNuevoContenido.addEventListener("click", (event) => {
+    // TODO:
+    console.log("Usuario hace clic en el botón")
+});
