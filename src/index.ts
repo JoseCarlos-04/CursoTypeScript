@@ -685,3 +685,43 @@ btnNuevoContenido.addEventListener("click", (event) => {
     // TODO:
     console.log("Usuario hace clic en el botón")
 });
+
+/*
+Distintos tipos de eventos
+
+click
+dblclick
+keydown
+keyup
+load
+mousedown
+mousemove
+mouseout
+mouseover
+mouseup
+*/
+
+function ejecutarAlgo(event:Event){
+    if(event.type == "click"){
+        console.log("Has hecho un click");
+    }else if(event.type == "dblclick"){
+        console.log("Has hecho un doble click");
+    }else{
+        console.log("Has hecho un evento distinto a click");
+    }
+}
+
+// Se puede añadir una función como evento
+btnNuevoContenido.addEventListener("click", ejecutarAlgo);
+btnNuevoContenido.addEventListener("dblclick", ejecutarAlgo);
+
+// Elimina el evento introducido
+btnNuevoContenido.removeEventListener("mouseout", ejecutarAlgo);
+
+
+// Recorrer elementos hijos
+let elementoOL:HTMLOListElement = document.getElementById("lista-contenidos") as HTMLOListElement;
+
+let primerElemento:HTMLLIElement = elementoOL.children[0] as HTMLLIElement;
+
+console.log(primerElemento.innerText);
