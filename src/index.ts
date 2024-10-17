@@ -657,11 +657,11 @@ Cookies.remove("email");
 
 // ACCEDEMOS A LOS ELEMENTOS DEL DOM
 
-let input = document.getElementById("input-contenido") as HTMLInputElement;
+let inputElement = document.getElementById("input-contenido") as HTMLInputElement;
 let btnNuevoContenido = document.getElementsByName("btn-add-content")[0] as HTMLButtonElement;
 let div = document.getElementsByTagName("div") as HTMLCollectionOf<HTMLDivElement>;
 
-console.log(`Valor del input: ${input.value}`);
+console.log(`Valor del input: ${inputElement.value}`);
 console.log(btnNuevoContenido);
 console.log(div);
 
@@ -676,10 +676,6 @@ console.log(elementosLi2);
 
 let nuevoElemento:HTMLLIElement = document.createElement("li");
 nuevoElemento.innerText = "Nuevo Elemento";
-
-elementoOl.appendChild(nuevoElemento);
-
-nuevoElemento.setAttribute("style", "");
 
 btnNuevoContenido.addEventListener("click", (event) => {
     // TODO:
@@ -725,3 +721,50 @@ let elementoOL:HTMLOListElement = document.getElementById("lista-contenidos") as
 let primerElemento:HTMLLIElement = elementoOL.children[0] as HTMLLIElement;
 
 console.log(primerElemento.innerText);
+
+function comprobarCoincidencia(input:string):boolean{
+    let elementoOl:HTMLOListElement = document.getElementById("lista-contenidos") as HTMLOListElement;
+
+    let listaLi:HTMLCollection = elementoOl.children;
+
+    for (let i = 0; i < listaLi.length; i++) {
+        if(listaLi[i].textContent == input){
+            return true;
+        }
+    }
+
+    return false;
+}
+
+btnNuevoContenido.addEventListener("click", (event) => {
+    if(inputElement.value != "" && inputElement.value != null){
+        if(!comprobarCoincidencia(inputElement.value)){
+            let elementoOl = document.getElementById("lista-contenidos") as HTMLOListElement;
+
+            let nuevoLi:HTMLLIElement = document.createElement("li");
+            nuevoLi.innerText = inputElement.value;
+
+            elementoOl.appendChild(nuevoLi);
+        }
+    }
+})
+
+let btnEliminarContenido = document.getElementsByName("btn-del-content")[0] as HTMLButtonElement;
+
+btnEliminarContenido.addEventListener("click", (event) => {
+    if(inputElement.value != "" && inputElement.value != null){
+        if(comprobarCoincidencia(inputElement.value)){
+            let elementoOl = document.getElementById("lista-contenidos") as HTMLOListElement;
+
+            let listaLi:HTMLCollection = elementoOl.children;
+
+            for (let i = 0; i < listaLi.length; i++) {
+                if(listaLi[i].textContent == inputElement.value){
+                    listaLi[i].remove();
+                }
+            }
+        }
+    }
+})
+
+// https://dog.ceo/api/breeds/image/random
