@@ -768,3 +768,66 @@ btnEliminarContenido.addEventListener("click", (event) => {
 })
 
 // https://dog.ceo/api/breeds/image/random
+
+type Perro = {
+    message:string,
+    status:string
+}
+
+async function obtenerImagen():Promise<Perro> {
+    let peticion = await fetch("https://dog.ceo/api/breeds/image/random");
+    let datos = await peticion.json() as Perro;
+
+    return datos
+}
+
+let funcionMostrarImagen = obtenerImagen();
+
+funcionMostrarImagen.then((prueba:Perro) => {
+    let image:HTMLImageElement = document.createElement("img") as HTMLImageElement;
+    image.src = prueba.message;
+
+    let body = document.getElementsByTagName("body")[0] as HTMLBodyElement;
+
+    body.append(image);
+})
+
+// TAREA CASA
+
+let listaStar = document.getElementsByName("star") as NodeListOf<HTMLElement>;
+
+listaStar.forEach(elemento => {
+    
+    elemento.addEventListener("mouseover", (evento:Event) => {
+        elemento.classList.remove("bi-star");
+
+        elemento.classList.add("bi-star-fill");
+    });
+
+    elemento.addEventListener("mouseout", (evento:Event) => {
+        if (!elemento.classList.contains ("clicked")){
+            elemento.classList.remove("bi-star-fill");
+
+            elemento.classList.add("bi-star");
+        }
+        
+    });
+
+   elemento.addEventListener("click", (evento:Event) => {
+        
+        if (elemento.classList.contains("clicked")){
+            elemento.classList.remove("clicked");
+
+            elemento.classList.remove("bi-star-fill");
+
+            elemento.classList.add("bi-star")
+        }else{
+            elemento.classList.add("clicked");
+
+            elemento.classList.remove("bi-start");
+
+            elemento.classList.add("bi-start-fill");
+        }     
+   });
+
+});
