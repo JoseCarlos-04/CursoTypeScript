@@ -1,13 +1,165 @@
 /******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
+
+/***/ "./node_modules/js-cookie/dist/js.cookie.js":
+/*!**************************************************!*\
+  !*** ./node_modules/js-cookie/dist/js.cookie.js ***!
+  \**************************************************/
+/***/ (function(module) {
+
+/*! js-cookie v3.0.5 | MIT */
+;
+(function (global, factory) {
+   true ? module.exports = factory() :
+  0;
+})(this, (function () { 'use strict';
+
+  /* eslint-disable no-var */
+  function assign (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+      for (var key in source) {
+        target[key] = source[key];
+      }
+    }
+    return target
+  }
+  /* eslint-enable no-var */
+
+  /* eslint-disable no-var */
+  var defaultConverter = {
+    read: function (value) {
+      if (value[0] === '"') {
+        value = value.slice(1, -1);
+      }
+      return value.replace(/(%[\dA-F]{2})+/gi, decodeURIComponent)
+    },
+    write: function (value) {
+      return encodeURIComponent(value).replace(
+        /%(2[346BF]|3[AC-F]|40|5[BDE]|60|7[BCD])/g,
+        decodeURIComponent
+      )
+    }
+  };
+  /* eslint-enable no-var */
+
+  /* eslint-disable no-var */
+
+  function init (converter, defaultAttributes) {
+    function set (name, value, attributes) {
+      if (typeof document === 'undefined') {
+        return
+      }
+
+      attributes = assign({}, defaultAttributes, attributes);
+
+      if (typeof attributes.expires === 'number') {
+        attributes.expires = new Date(Date.now() + attributes.expires * 864e5);
+      }
+      if (attributes.expires) {
+        attributes.expires = attributes.expires.toUTCString();
+      }
+
+      name = encodeURIComponent(name)
+        .replace(/%(2[346B]|5E|60|7C)/g, decodeURIComponent)
+        .replace(/[()]/g, escape);
+
+      var stringifiedAttributes = '';
+      for (var attributeName in attributes) {
+        if (!attributes[attributeName]) {
+          continue
+        }
+
+        stringifiedAttributes += '; ' + attributeName;
+
+        if (attributes[attributeName] === true) {
+          continue
+        }
+
+        // Considers RFC 6265 section 5.2:
+        // ...
+        // 3.  If the remaining unparsed-attributes contains a %x3B (";")
+        //     character:
+        // Consume the characters of the unparsed-attributes up to,
+        // not including, the first %x3B (";") character.
+        // ...
+        stringifiedAttributes += '=' + attributes[attributeName].split(';')[0];
+      }
+
+      return (document.cookie =
+        name + '=' + converter.write(value, name) + stringifiedAttributes)
+    }
+
+    function get (name) {
+      if (typeof document === 'undefined' || (arguments.length && !name)) {
+        return
+      }
+
+      // To prevent the for loop in the first place assign an empty array
+      // in case there are no cookies at all.
+      var cookies = document.cookie ? document.cookie.split('; ') : [];
+      var jar = {};
+      for (var i = 0; i < cookies.length; i++) {
+        var parts = cookies[i].split('=');
+        var value = parts.slice(1).join('=');
+
+        try {
+          var found = decodeURIComponent(parts[0]);
+          jar[found] = converter.read(value, found);
+
+          if (name === found) {
+            break
+          }
+        } catch (e) {}
+      }
+
+      return name ? jar[name] : jar
+    }
+
+    return Object.create(
+      {
+        set,
+        get,
+        remove: function (name, attributes) {
+          set(
+            name,
+            '',
+            assign({}, attributes, {
+              expires: -1
+            })
+          );
+        },
+        withAttributes: function (attributes) {
+          return init(this.converter, assign({}, this.attributes, attributes))
+        },
+        withConverter: function (converter) {
+          return init(assign({}, this.converter, converter), this.attributes)
+        }
+      },
+      {
+        attributes: { value: Object.freeze(defaultAttributes) },
+        converter: { value: Object.freeze(converter) }
+      }
+    )
+  }
+
+  var api = init(defaultConverter, { path: '/' });
+  /* eslint-enable no-var */
+
+  return api;
+
+}));
+
+
+/***/ }),
 
 /***/ "./src/index.ts":
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
-/***/ (function(__unused_webpack_module, exports) {
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
+"use strict";
 
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -30,6 +182,9 @@ var __asyncGenerator = (this && this.__asyncGenerator) || function (thisArg, _ar
     function fulfill(value) { resume("next", value); }
     function reject(value) { resume("throw", value); }
     function settle(f, v) { if (f(v), q.shift(), q.length) resume(q[0][0], q[0][1]); }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 var _a;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
@@ -455,70 +610,63 @@ console.log(saludarSobrecarga("José Carlos", "Parrilla Romero", "20"));
 console.log(saludarSobrecarga("José Carlos", "Parrilla Romero", 20));
 // ACTIVIDAD 1.1
 // Ejercicio 2
-/*function almacenaTarea(type:string = "SessionStorage", key:string, data:Tarea[]){
-    if(type == "session"){
+function almacenaTarea(type = "SessionStorage", key, data) {
+    if (type == "session") {
         sessionStorage.setItem(key, JSON.stringify(data));
-    }else if(type == "local"){
+    }
+    else if (type == "local") {
         localStorage.setItem(key, JSON.stringify(data));
     }
 }
-
 // Ejercicio 3
 almacenaTarea("session", "datos", listaTareasNueva);
 almacenaTarea("local", "datos", listaTareasNueva);
-
 // Ejercicio 4
-function recuperaInfo(type:string = "session", key:string):string{
-    let dato:string|null;
-
-    if(type == "session"){
+function recuperaInfo(type = "session", key) {
+    let dato;
+    if (type == "session") {
         dato = sessionStorage.getItem(key);
-    }else if(type == "local"){
+    }
+    else if (type == "local") {
         dato = localStorage.getItem(key);
-    }else{
+    }
+    else {
         dato = null;
     }
-
-    if(dato != null){
+    if (dato != null) {
         return dato;
-    }else{
+    }
+    else {
         return "";
     }
 }
-
 // Ejercicio 5
-let listaTareaObtenida:Tarea[] = JSON.parse(recuperaInfo("session", "datos"));
+let listaTareaObtenida = JSON.parse(recuperaInfo("session", "datos"));
 console.log(listaTareaObtenida);
-
-let listaTareaObtenida2:Tarea[] = JSON.parse(recuperaInfo("local", "datos"));
+let listaTareaObtenida2 = JSON.parse(recuperaInfo("local", "datos"));
 console.log(listaTareaObtenida2);
-
 // Ejercicio 6
-function borraInfoAlmacenada(type:string = "session", key:string){
-    if(type == "session"){
+function borraInfoAlmacenada(type = "session", key) {
+    if (type == "session") {
         sessionStorage.removeItem(key);
-    }else if(type == "local"){
+    }
+    else if (type == "local") {
         localStorage.removeItem(key);
     }
 }
-
 borraInfoAlmacenada("session", "datos");
 borraInfoAlmacenada("local", "datos");
-
 // Ejercicio 7
-import Cookies from "js-cookie";
-
-Cookies.set("nombre", "José Carlos", {expires:7, path:"/"});
-Cookies.set("apellido", "Parrilla Romero", {expires:2});
-Cookies.set("email", "jparrom736@iescarrillo.es", {expires:4});
-
-console.log(Cookies.get("nombre"));
-console.log(Cookies.get("apellido"));
-console.log(Cookies.get("email"));
-
-Cookies.remove("nombre");
-Cookies.remove("apellido");
-Cookies.remove("email");*/
+const js_cookie_1 = __importDefault(__webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/dist/js.cookie.js"));
+js_cookie_1.default.set("nombre", "José Carlos", { expires: 7, path: "/" });
+js_cookie_1.default.set("apellido", "Parrilla Romero", { expires: 2 });
+js_cookie_1.default.set("email", "jparrom736@iescarrillo.es", { expires: 4 });
+console.log(js_cookie_1.default.get("nombre"));
+console.log(js_cookie_1.default.get("apellido"));
+console.log(js_cookie_1.default.get("email"));
+js_cookie_1.default.remove("nombre");
+js_cookie_1.default.remove("apellido");
+js_cookie_1.default.remove("email");
 // ACCEDEMOS A LOS ELEMENTOS DEL DOM
 let inputElement = document.getElementById("input-contenido");
 let btnNuevoContenido = document.getElementsByName("btn-add-content")[0];
@@ -620,18 +768,145 @@ funcionMostrarImagen.then((prueba) => {
     let body = document.getElementsByTagName("body")[0];
     body.append(image);
 });
+// TAREA CASA
+let listaStar = document.getElementsByName("star");
+listaStar.forEach(elemento => {
+    elemento.addEventListener("mouseover", (evento) => {
+        elemento.classList.remove("bi-star");
+        elemento.classList.add("bi-star-fill");
+    });
+    elemento.addEventListener("mouseout", (evento) => {
+        if (!elemento.classList.contains("clicked")) {
+            elemento.classList.remove("bi-star-fill");
+            elemento.classList.add("bi-star");
+        }
+    });
+    elemento.addEventListener("click", (evento) => {
+        if (elemento.classList.contains("clicked")) {
+            elemento.classList.remove("clicked");
+            elemento.classList.remove("bi-star-fill");
+            elemento.classList.add("bi-star");
+        }
+        else {
+            elemento.classList.add("clicked");
+            elemento.classList.remove("bi-start");
+            elemento.classList.add("bi-start-fill");
+        }
+    });
+});
+// Clases en TypeScript
+const Persona_1 = __importDefault(__webpack_require__(/*! ./models/Persona */ "./src/models/Persona.ts"));
+const Empleadoo_1 = __importDefault(__webpack_require__(/*! ./models/Empleadoo */ "./src/models/Empleadoo.ts"));
+let persona1 = new Persona_1.default("José Carlos", "Parrilla Romero", "4938839R", 20);
+console.log(persona1.getNombre);
+persona1.toTexto();
+let empleado = new Empleadoo_1.default("José Carlos", "Parrilla Romero", "4938839R", 1800, 20);
+
+
+/***/ }),
+
+/***/ "./src/models/Empleadoo.ts":
+/*!*********************************!*\
+  !*** ./src/models/Empleadoo.ts ***!
+  \*********************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+"use strict";
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const Persona_1 = __importDefault(__webpack_require__(/*! ./Persona */ "./src/models/Persona.ts"));
+class Empleadoo extends Persona_1.default {
+    constructor(nombre, apellidos, dni, salario, edad) {
+        super(nombre, apellidos, dni, edad);
+        this.salario = salario;
+    }
+    toTexto() {
+        super.toTexto();
+        console.log(`${this.salario}`);
+    }
+}
+exports["default"] = Empleadoo;
+
+
+/***/ }),
+
+/***/ "./src/models/Persona.ts":
+/*!*******************************!*\
+  !*** ./src/models/Persona.ts ***!
+  \*******************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+class Persona {
+    constructor(nombre, apellidos, dni, edad) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        if (edad == undefined) {
+            this.edad = 0;
+        }
+        else {
+            this.edad = edad;
+        }
+        this.dni = dni;
+    }
+    set setNombre(nombre) {
+        this.nombre = nombre;
+    }
+    get getNombre() {
+        return this.nombre;
+    }
+    getJSON() {
+        return JSON.stringify(new Persona(this.nombre, this.apellidos, this.dni, this.edad));
+    }
+    getJSONToObject(json) {
+        return JSON.parse(json);
+    }
+    toTexto() {
+        console.log(`${this.dni} : ${this.nombre} - ${this.apellidos} - ${this.edad}`);
+    }
+}
+exports["default"] = Persona;
 
 
 /***/ })
 
 /******/ 	});
 /************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
 /******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = {};
-/******/ 	__webpack_modules__["./src/index.ts"](0, __webpack_exports__);
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.ts");
 /******/ 	
 /******/ })()
 ;

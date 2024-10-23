@@ -831,3 +831,17 @@ listaStar.forEach(elemento => {
    });
 
 });
+
+
+// Clases en TypeScript
+
+import Persona from './models/Persona';
+import Empleadoo from './models/Empleadoo';
+
+let persona1:Persona = new Persona("José Carlos", "Parrilla Romero", "4938839R", 20);
+
+console.log(persona1.getNombre);
+
+persona1.toTexto();
+
+let empleado:Empleadoo = new Empleadoo("José Carlos", "Parrilla Romero", "4938839R", 1800, 20);
