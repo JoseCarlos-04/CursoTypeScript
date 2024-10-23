@@ -3,7 +3,7 @@ export default class Persona implements Persona {
     apellidos:string;
     readonly dni:string;
     edad?:number;
-    
+    // protected direccion:string;
 
     constructor (nombre:string, apellidos:string, dni:string, edad?:number){
         this.nombre = nombre;
@@ -28,6 +28,7 @@ export default class Persona implements Persona {
         return JSON.stringify(new Persona(this.nombre, this.apellidos, this.dni, this.edad));
     }
     
+    // (json:string) => Persona
     getJSONToObject(json:string):Persona{
         return JSON.parse(json) as Persona;
     }
